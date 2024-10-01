@@ -19,6 +19,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 
+import { UserService } from 'src/app/services/user.service';
+
 interface notifications {
   id: number;
   img: string;
@@ -67,6 +69,7 @@ interface quicklinks {
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent {
+  userData: any;
   searchText: string = '';
   navItems = navItems;
 
@@ -112,11 +115,29 @@ export class HeaderComponent {
   ];
 
   constructor(
+    private userService: UserService,
     private vsidenav: CoreService,
     public dialog: MatDialog,
     private translate: TranslateService
   ) {
     translate.setDefaultLang('en');
+  }
+
+
+  ngOnInit() {
+    // Subscribe to the login data observable
+    this.userService.loginData$.subscribe((data) => {
+      this.userData = data;
+    });
+
+    // Optionally, get login data from local storage on component init
+    this.userService.getLoginData();
+  }
+
+  // Method to log out the user
+  logout() {
+    
+    this.userService.clearLoginData(); // Clear user data
   }
 
   openDialog() {

@@ -1,6 +1,5 @@
-
-
-
+import { environment } from 'src/enviroment/environment';
+// import { environment } from 'src/environments/environment';
 import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import { ApiRegionService } from '../api-region.service';
@@ -150,9 +149,18 @@ export class AreasComponent {
   }
 
   getElements(): Observable<any[]> {
-    return this.http.get<{ data: any[] }>('https://electronkw.net/new_laravel_API/api/regions').pipe(
-      map((response) => response.data)
-    );
+
+    const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+  return this.http.get<{ data: any[] }>(`${environment.apiUrl}/regions`, { headers }).pipe(
+    map((response) => response.data)
+  );
   }
 
     // search
@@ -191,9 +199,25 @@ export class AreasComponent {
 
 // delete
   deleteElement(element: PeriodicElement): void {
+
+    
     const confirmDelete = confirm(`Are you sure you want to delete ${element.name_ar}?`); // Optional confirmation dialog
     if (confirmDelete) {
-      this.http.delete(`https://electronkw.net/new_laravel_API/api/regions/${element.id}`).subscribe(
+      const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+      //  const url ="https://electronkw.net/new_laravel_API/api/regions";
+
+        // If editing, send a PUT request to update the data
+        this.http.delete<{ data: any[] }>( `${environment.apiUrl}/regions/${element.id}`,
+           // formData as the request body
+          { headers } // headers passed separately as the third argument
+          ).subscribe(
         response => {
           console.log('Data deleted successfully:', response);
           this.fetchData(); // Refresh data after deletion
@@ -311,11 +335,25 @@ export class DialogOverviewExampleDialog {
   save(): void {
     if (this.form.valid) {
       const formData = this.form.value;
-      console.log
+      // console.log
 
       if (this.isEditMode) {
+
+        const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+
         // If editing, send a PUT request to update the data
-        this.http.put(`https://electronkw.net/new_laravel_API/api/regions/${this.data.id}`, formData).subscribe(
+        this.http.put<{ data: any[] }>(
+          `${environment.apiUrl}/regions/${this.data.id}`,
+          formData, // formData as the request body
+          { headers } // headers passed separately as the third argument
+        ).subscribe(
           (response) => {
             console.log('Data updated successfully:', response);
             this.dialogRef.close(formData); // Close the dialog and return the updated data
@@ -325,8 +363,21 @@ export class DialogOverviewExampleDialog {
           }
         );
       } else {
+
+        const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+        console.log("authToken",authToken);
+        // Set the headers including the Authorization token
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+        };
         // If adding a new area, send a POST request
-        this.http.post('https://electronkw.net/new_laravel_API/api/regions', formData).subscribe(
+        // this.http.post('https://electronkw.net/new_laravel_API/api/regions', formData)
+        this.http.post<{ data: any[] }>(
+          `${environment.apiUrl}/regions`,
+          formData, // formData as the request body
+          { headers } // headers passed separately as the third argument
+        ).subscribe(
           (response) => {
             console.log('Data saved successfully:', response);
             this.dialogRef.close(formData); // Close the dialog and return the new data
