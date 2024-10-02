@@ -10,11 +10,7 @@ import { CoreService } from 'src/app/services/core.service';
     <div class="branding">
       @if(options.theme === 'light') {
       <a href="/">
-        <img
-          src="./assets/images/logos/dark-logo.svg"
-          class="align-middle m-2"
-          alt="logo"
-        />
+        Electron
       </a>
       } @if(options.theme === 'dark') {
       <a href="/">
