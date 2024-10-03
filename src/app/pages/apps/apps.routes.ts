@@ -237,7 +237,7 @@ export const AppsRoutes: Routes = [
         path: 'governorates',
         component: GovernoratesComponent,
         data: {
-          title: 'الفروع',
+          title: 'المحافظات',
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'governorates' },
