@@ -80,6 +80,12 @@ export const navItems: NavItem[] = [
     route: 'apps/governorates',
   },
   {
+    displayName: 'نسب التقسيط',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/installment_rates',
+  },
+  {
     displayName: 'Notes',
     iconName: 'note',
     bgcolor: 'success',

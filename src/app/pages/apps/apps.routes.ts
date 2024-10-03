@@ -23,6 +23,7 @@ import { AreasComponent } from './areas/areas.component';
 import { NationalitiesComponent } from './nationalities/nationalities.component';
 import { BranchesComponent } from './branches/branches.component';
 import { GovernoratesComponent } from './governorates/governorates.component';
+import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -240,6 +241,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'governorates' },
+          ],
+        },
+      },
+      {
+        path: 'installment_rates',
+        component: InstallmentRatesComponent,
+        data: {
+          title: 'نسب التقسيط',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Installment_rates' },
           ],
         },
       },

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiRegionService {
-  private baseUrl = 'https://electronkw.net/new_laravel_API/api/regions'; // Replace with your API base URL
+  private baseUrl = 'http://127.0.0.1:8000/api/regions'; // Replace with your API base URL
 
   constructor(private http: HttpClient) { }
 
