@@ -20,6 +20,7 @@ import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.compon
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AreasComponent } from './areas/areas.component';
+import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -202,6 +203,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Areas' },
+          ],
+        },
+      },
+      {
+        path: 'installment_rates',
+        component: InstallmentRatesComponent,
+        data: {
+          title: 'نسب التقسيط',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Installment_rates' },
           ],
         },
       },

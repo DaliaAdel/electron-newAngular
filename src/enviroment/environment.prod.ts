@@ -1,5 +1,7 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://electronkw.net/new_laravel_API/api',  // Production API URL
+    // https://electronkw.net/new_laravel_API/api
+    // http://127.0.0.1:8000/api
+    apiUrl: 'http://127.0.0.1:8000/api',  // Production API URL
   };
   
