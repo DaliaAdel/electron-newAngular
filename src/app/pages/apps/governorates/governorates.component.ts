@@ -1,6 +1,6 @@
 import { environment } from 'src/enviroment/environment';
 import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { ApiRegionService } from '../api-region.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,11 +20,11 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { Inject } from '@angular/core'; // Make sure this is imported
-import {MatSelectModule} from '@angular/material/select';
-import {MatTableModule} from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 import { map } from 'rxjs/operators';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -32,13 +32,14 @@ export interface PeriodicElement {
   id: string;
   name_ar: string;
   name_en: string;
-  governorate_id: string;
   created_by: string;
+  region_count : string;
 }
 
+
 @Component({
-  selector: 'app-areas',
-    standalone: true,
+  selector: 'app-governorates',
+  standalone: true,
   imports: [
     MaterialModule,
     FormsModule,
@@ -50,13 +51,12 @@ export interface PeriodicElement {
     HttpClientModule,
     // HttpClient,
   ],
-  templateUrl: './areas.component.html',
-  styleUrls: ['./areas.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './governorates.component.html',
+  styleUrl: './governorates.component.scss'
 })
+export class GovernoratesComponent {
 
-export class AreasComponent {
-  displayedColumns: string[] = ['#', 'name_ar', 'name_en', 'governorate_id', 'created_by', 'action'];
+  displayedColumns: string[] = ['#', 'name_ar', 'name_en','region_count', 'created_by', 'action'];
   dataSource = new MatTableDataSource<any>();
 
   constructor(private http: HttpClient, private dialog: MatDialog) {
@@ -66,6 +66,7 @@ export class AreasComponent {
   fetchData() {
     this.getElements().subscribe(
       (data) => {
+        // console.log("sssudddd", data);
         this.dataSource.data = data;
       },
       (error) => {
@@ -78,18 +79,19 @@ export class AreasComponent {
 
     const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
 
-    console.log("authToken",authToken);
+    console.log("authToken", authToken);
     // Set the headers including the Authorization token
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
 
-  return this.http.get<{ data: any[] }>(`${environment.apiUrl}/regions`, { headers }).pipe(
-    map((response) => response.data)
-  );
+    return this.http.get<{ data: any[] }>(`${environment.apiUrl}/governorates`, { headers }).pipe(
+      map((response) => response.data)
+    );
+
   }
 
-    // search
+  // search
   applyFilter(filterValue: string): void {
     this.dataSource.filter = filterValue.trim().toLowerCase(); // Apply the filter to MatTableDataSource
   }
@@ -123,27 +125,22 @@ export class AreasComponent {
     });
   }
 
-// delete
+  // delete
   deleteElement(element: PeriodicElement): void {
-
-    
     const confirmDelete = confirm(`Are you sure you want to delete ${element.name_ar}?`); // Optional confirmation dialog
     if (confirmDelete) {
       const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
 
-    console.log("authToken",authToken);
-    // Set the headers including the Authorization token
-    const headers = {
-      Authorization: `Bearer ${authToken}`,
-    };
-
-      //  const url ="https://electronkw.net/new_laravel_API/api/regions";
-
-        // If editing, send a PUT request to update the data
-        this.http.delete<{ data: any[] }>( `${environment.apiUrl}/regions/${element.id}`,
-           // formData as the request body
-          { headers } // headers passed separately as the third argument
-          ).subscribe(
+      console.log("authToken", authToken);
+      // Set the headers including the Authorization token
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+      };
+      // If editing, send a PUT request to update the data
+      this.http.delete<{ data: any[] }>(`${environment.apiUrl}/governorates/${element.id}`,
+        // formData as the request body
+        { headers } // headers passed separately as the third argument
+      ).subscribe(
         response => {
           console.log('Data deleted successfully:', response);
           this.fetchData(); // Refresh data after deletion
@@ -155,7 +152,9 @@ export class AreasComponent {
       );
     }
   }
+
 }
+
 @Component({
   selector: 'dialog-overview-example-dialog',
   standalone: true,
@@ -168,9 +167,10 @@ export class AreasComponent {
     MatDialogActions,
     MatSelectModule,
   ],
-  templateUrl: './dialog-overview-example-dialog.html',
+  templateUrl: './dialog-overview.html',
 })
 export class DialogOverviewExampleDialog {
+
   form: FormGroup;
   isEditMode: boolean = false;
 
@@ -184,7 +184,6 @@ export class DialogOverviewExampleDialog {
     this.form = this.fb.group({
       name_ar: ['', Validators.required],
       name_en: ['', Validators.required],
-      governorate_id: ['', Validators.required],
     });
 
     // Check if we are in edit mode by checking if `data` exists
@@ -201,22 +200,20 @@ export class DialogOverviewExampleDialog {
   save(): void {
     if (this.form.valid) {
       const formData = this.form.value;
-      // console.log
+      console.log("ss");
 
       if (this.isEditMode) {
 
         const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
 
-    console.log("authToken",authToken);
-    // Set the headers including the Authorization token
-    const headers = {
-      Authorization: `Bearer ${authToken}`,
-    };
-
-
+        console.log("authToken", authToken);
+        // Set the headers including the Authorization token
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+        };
         // If editing, send a PUT request to update the data
         this.http.put<{ data: any[] }>(
-          `${environment.apiUrl}/regions/${this.data.id}`,
+          `${environment.apiUrl}/governorates/${this.data.id}`,
           formData, // formData as the request body
           { headers } // headers passed separately as the third argument
         ).subscribe(
@@ -229,10 +226,10 @@ export class DialogOverviewExampleDialog {
           }
         );
       } else {
-
+        console.log("yes");
         const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
 
-        console.log("authToken",authToken);
+        console.log("authToken", authToken);
         // Set the headers including the Authorization token
         const headers = {
           Authorization: `Bearer ${authToken}`,
@@ -240,7 +237,7 @@ export class DialogOverviewExampleDialog {
         // If adding a new area, send a POST request
         // this.http.post('https://electronkw.net/new_laravel_API/api/regions', formData)
         this.http.post<{ data: any[] }>(
-          `${environment.apiUrl}/regions`,
+          `${environment.apiUrl}/governorates`,
           formData, // formData as the request body
           { headers } // headers passed separately as the third argument
         ).subscribe(
@@ -256,4 +253,3 @@ export class DialogOverviewExampleDialog {
     }
   }
 }
-
