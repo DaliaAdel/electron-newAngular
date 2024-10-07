@@ -86,6 +86,7 @@ export const navItems: NavItem[] = [
     route: 'apps/installment_rates',
   },
   {
+
     displayName: 'نسب الوزارات',
     iconName: 'brand-ctemplar',
     bgcolor: 'warning',
@@ -109,6 +110,12 @@ export const navItems: NavItem[] = [
     iconName: 'brand-ctemplar',
     bgcolor: 'warning',
     route: 'apps/police-stations',
+
+    displayName: 'البنوك',
+    iconName: 'currency-dollar',
+    bgcolor: 'warning',
+    route: 'apps/banks',
+
   },
   {
     displayName: 'Notes',

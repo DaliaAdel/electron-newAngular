@@ -24,10 +24,14 @@ import { NationalitiesComponent } from './nationalities/nationalities.component'
 import { BranchesComponent } from './branches/branches.component';
 import { GovernoratesComponent } from './governorates/governorates.component';
 import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
+
 import { MinistriesComponent } from './ministries/ministries.component';
 import { MinistryPercentageComponent } from './ministry-percentage/ministry-percentage.component';
 import { CourtsComponent } from './courts/courts.component';
 import { PoliceStationsComponent } from './police-stations/police-stations.component';
+
+import { BanksComponent } from './banks/banks.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -260,6 +264,7 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+
         path: 'ministry-rates',
         component: MinistryPercentageComponent,
         data: {
@@ -302,6 +307,15 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'police-stations' },
+
+        path: 'banks',
+        component: BanksComponent,
+        data: {
+          title: 'البنوك',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Banks' },
+
           ],
         },
       },
