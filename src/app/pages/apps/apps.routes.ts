@@ -21,6 +21,7 @@ import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.com
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AreasComponent } from './areas/areas.component';
 import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
+import { BanksComponent } from './banks/banks.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -214,6 +215,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Installment_rates' },
+          ],
+        },
+      },
+      {
+        path: 'banks',
+        component: BanksComponent,
+        data: {
+          title: 'البنوك',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'Banks' },
           ],
         },
       },

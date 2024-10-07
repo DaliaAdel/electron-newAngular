@@ -68,6 +68,12 @@ export const navItems: NavItem[] = [
     route: 'apps/installment_rates',
   },
   {
+    displayName: 'البنوك',
+    iconName: 'currency-dollar',
+    bgcolor: 'warning',
+    route: 'apps/banks',
+  },
+  {
     displayName: 'Notes',
     iconName: 'note',
     bgcolor: 'success',
