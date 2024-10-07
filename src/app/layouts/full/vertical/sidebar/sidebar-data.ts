@@ -86,6 +86,31 @@ export const navItems: NavItem[] = [
     route: 'apps/installment_rates',
   },
   {
+    displayName: 'نسب الوزارات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/ministry-rates',
+  },
+  {
+    displayName: 'الوزارات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/ministries',
+  },
+
+  {
+    displayName: 'المحاكم',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/courts',
+  },
+  {
+    displayName: 'المغافر',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/police-stations',
+  },
+  {
     displayName: 'Notes',
     iconName: 'note',
     bgcolor: 'success',
