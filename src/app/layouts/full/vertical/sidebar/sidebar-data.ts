@@ -62,6 +62,24 @@ export const navItems: NavItem[] = [
     route: 'apps/areas',
   },
   {
+    displayName: 'الجنسيات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/nationalities',
+  },
+  {
+    displayName: 'الفروع',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'success',
+    route: 'apps/branches',
+  },
+  {
+    displayName: 'المحافظات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'success',
+    route: 'apps/governorates',
+  },
+  {
     displayName: 'نسب التقسيط',
     iconName: 'brand-ctemplar',
     bgcolor: 'warning',

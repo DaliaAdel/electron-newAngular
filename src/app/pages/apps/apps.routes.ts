@@ -20,6 +20,9 @@ import { AppAddInvoiceComponent } from './invoice/add-invoice/add-invoice.compon
 import { AppInvoiceViewComponent } from './invoice/invoice-view/invoice-view.component';
 import { AppEditInvoiceComponent } from './invoice/edit-invoice/edit-invoice.component';
 import { AreasComponent } from './areas/areas.component';
+import { NationalitiesComponent } from './nationalities/nationalities.component';
+import { BranchesComponent } from './branches/branches.component';
+import { GovernoratesComponent } from './governorates/governorates.component';
 import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
 import { BanksComponent } from './banks/banks.component';
 
@@ -204,6 +207,41 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Areas' },
+          ],
+        },
+      },
+
+      {
+        path: 'nationalities',
+        component: NationalitiesComponent,
+        data: {
+          title: 'الجنسيات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'nationalities' },
+          ],
+        },
+      },
+
+      {
+        path: 'branches',
+        component: BranchesComponent,
+        data: {
+          title: 'الفروع',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'branches' },
+          ],
+        },
+      },
+      {
+        path: 'governorates',
+        component: GovernoratesComponent,
+        data: {
+          title: 'المحافظات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'governorates' },
           ],
         },
       },
