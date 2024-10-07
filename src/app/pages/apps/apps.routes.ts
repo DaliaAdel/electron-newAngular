@@ -24,7 +24,14 @@ import { NationalitiesComponent } from './nationalities/nationalities.component'
 import { BranchesComponent } from './branches/branches.component';
 import { GovernoratesComponent } from './governorates/governorates.component';
 import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
+
+import { MinistriesComponent } from './ministries/ministries.component';
+import { MinistryPercentageComponent } from './ministry-percentage/ministry-percentage.component';
+import { CourtsComponent } from './courts/courts.component';
+import { PoliceStationsComponent } from './police-stations/police-stations.component';
+
 import { BanksComponent } from './banks/banks.component';
+
 
 export const AppsRoutes: Routes = [
   {
@@ -257,6 +264,50 @@ export const AppsRoutes: Routes = [
         },
       },
       {
+
+        path: 'ministry-rates',
+        component: MinistryPercentageComponent,
+        data: {
+          title: 'نسب الوزارات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'نسب الوزارات' },
+          ],
+        },
+      },
+      {
+        path: 'ministries',
+        component: MinistriesComponent,
+        data: {
+          title: 'الوزارات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'ministries' },
+          ],
+        },
+      },
+
+      {
+        path: 'courts',
+        component: CourtsComponent,
+        data: {
+          title: 'المحاكم',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'courts' },
+          ],
+        },
+      },
+      // PoliceStationsComponent
+      {
+        path: 'police-stations',
+        component: PoliceStationsComponent,
+        data: {
+          title: 'المغافر',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'police-stations' },
+
         path: 'banks',
         component: BanksComponent,
         data: {
@@ -264,6 +315,7 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Banks' },
+
           ],
         },
       },
