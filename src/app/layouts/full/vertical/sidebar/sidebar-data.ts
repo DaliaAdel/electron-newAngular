@@ -92,6 +92,12 @@ export const navItems: NavItem[] = [
     route: 'apps/banks',
   },
   {
+    displayName: 'منجزين المعاملات',
+    iconName: 'currency-dollar',
+    bgcolor: 'warning',
+    route: 'apps/transactions-completed',
+  },
+  {
     displayName: 'Notes',
     iconName: 'note',
     bgcolor: 'success',

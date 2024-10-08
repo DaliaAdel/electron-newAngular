@@ -25,6 +25,7 @@ import { BranchesComponent } from './branches/branches.component';
 import { GovernoratesComponent } from './governorates/governorates.component';
 import { InstallmentRatesComponent } from './installment-rates/installment-rates.component';
 import { BanksComponent } from './banks/banks.component';
+import { TransactionsCompletedComponent } from './transactions-completed/transactions-completed.component';
 
 export const AppsRoutes: Routes = [
   {
@@ -264,6 +265,17 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Banks' },
+          ],
+        },
+      },
+      {
+        path: 'transactions-completed',
+        component: TransactionsCompletedComponent,
+        data: {
+          title: 'منجزين المعاملات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'TransactionsCompleted' },
           ],
         },
       },
