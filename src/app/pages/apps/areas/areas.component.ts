@@ -185,6 +185,7 @@ export class DialogOverviewExampleDialog {
       name_ar: ['', Validators.required],
       name_en: ['', Validators.required],
       governorate_id: ['', Validators.required],
+      created_by : ['' , Validators.required],
     });
 
     // Check if we are in edit mode by checking if `data` exists
