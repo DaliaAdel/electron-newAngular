@@ -309,6 +309,10 @@ export const AppsRoutes: Routes = [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'police-stations' },
 
+          ],
+        },
+      },
+      {
         path: 'banks',
         component: BanksComponent,
         data: {
@@ -316,7 +320,6 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Banks' },
-
           ],
         },
       },

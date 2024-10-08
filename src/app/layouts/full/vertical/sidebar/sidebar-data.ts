@@ -111,11 +111,12 @@ export const navItems: NavItem[] = [
     bgcolor: 'warning',
     route: 'apps/police-stations',
 
+  },
+  {
     displayName: 'البنوك',
-    iconName: 'currency-dollar',
+    iconName: 'brand-ctemplar',
     bgcolor: 'warning',
     route: 'apps/banks',
-
   },
   {
     displayName: 'منجزين المعاملات',
