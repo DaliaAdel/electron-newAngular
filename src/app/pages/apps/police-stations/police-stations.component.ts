@@ -1,5 +1,5 @@
 import { environment } from 'src/enviroment/environment';
-import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal ,OnInit } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import { ApiRegionService } from '../api-region.service';
 import { DatePipe } from '@angular/common';
@@ -27,7 +27,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
 export interface PeriodicElement {
   id: string;
   name_ar: string;
@@ -170,12 +170,14 @@ export class PoliceStationsComponent {
     MatDialogContent,
     MatDialogActions,
     MatSelectModule,
+    CommonModule,
   ],
   templateUrl: './dialog-overview-example-dialog.html',
 })
-export class DialogOverviewExampleDialog {
+export class DialogOverviewExampleDialog implements OnInit {
   form: FormGroup;
   isEditMode: boolean = false;
+  region: any[] = []; // To store the additional data
 
   constructor(
     private fb: FormBuilder,
@@ -187,7 +189,7 @@ export class DialogOverviewExampleDialog {
     this.form = this.fb.group({
       name_ar: ['', Validators.required],
       name_en: ['', Validators.required],
-      governorate_id: ['', Validators.required],
+      region_id: ['', Validators.required],
     });
 
     // Check if we are in edit mode by checking if `data` exists
@@ -195,6 +197,29 @@ export class DialogOverviewExampleDialog {
       this.isEditMode = true;
       this.form.patchValue(data); // Populate the form with the area data
     }
+  }
+
+  ngOnInit(): void {
+    this.fetchGovernorate(); // Fetch additional data on initialization
+  }
+
+  fetchGovernorate(): void {
+    const authToken = localStorage.getItem('authToken');
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    this.http.get<{ data: any[] }>(`${environment.apiUrl}/regions`, { headers })
+      .subscribe(
+        (response) => {
+          // console.log('Ministry percentages fetched:', response.data);
+          this.region = response.data; // Store the fetched data
+          // console.log('Ministry percentages fetched2:', this.ministryPercentages);
+        },
+        (error) => {
+          console.error('Error fetching region:', error);
+        }
+      );
   }
 
   onNoClick(): void {
