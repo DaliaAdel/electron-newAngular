@@ -230,6 +230,7 @@ export class AreasComponent {
     }
   }
 }
+// ddd
 // export interface DialogData {
 //   name: string;
 //   animal: string;
