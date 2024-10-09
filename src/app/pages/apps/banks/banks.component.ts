@@ -39,6 +39,7 @@ export interface PeriodicElement {
   bank_account_date: string;
   branch: string;
   iban: string;
+  created_by: string;
 }
 
 @Component({
@@ -60,7 +61,7 @@ export interface PeriodicElement {
 })
 
 export class BanksComponent {
-  displayedColumns: string[] = ['#', 'name_ar', 'bank_account_number', 'bank_account_date', 'branch', 'iban' , 'action'];
+  displayedColumns: string[] = ['#', 'name_ar', 'bank_account_number', 'bank_account_date', 'branch', 'iban' ,'created_by', 'action'];
   dataSource = new MatTableDataSource<any>();
 
   constructor(private http: HttpClient, private dialog: MatDialog) {
@@ -196,6 +197,7 @@ export class DialogOverviewExampleDialog {
       bank_account_date: ['', Validators.required],
       branch: ['', Validators.required],
       iban: ['', Validators.required],
+      created_by: ['' ,Validators.required],
       // active: ['', Validators.required],
     });
 
