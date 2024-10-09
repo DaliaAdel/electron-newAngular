@@ -157,6 +157,13 @@ export class AreasComponent {
     }
   }
 }
+// ddd
+// export interface DialogData {
+//   name: string;
+//   animal: string;
+// }
+
+
 @Component({
   selector: 'dialog-overview-example-dialog',
   standalone: true,
