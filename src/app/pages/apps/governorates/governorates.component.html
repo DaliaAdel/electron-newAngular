@@ -1,0 +1,99 @@
+
+<mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+      <div class="row justify-content-between gap-16">
+        <div class="col-lg-4">
+          <mat-form-field appearance="outline" class="w-100 hide-hint">
+            <!-- (keyup)="applyFilter($any($event.target).value)" -->
+            <input
+              matInput
+              placeholder="بحث .."
+              (keyup)="applyFilter($any($event.target).value)" 
+            />
+            <mat-icon matSuffix>
+              <i-tabler name="search" class="icon-20"></i-tabler>
+            </mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4 d-flex align-items-center justify-content-end">
+
+          <button mat-raised-button (click)="openDialog()" color="primary">
+            اضافة محافظة جديدة
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="cardWithShadow">
+    <mat-card-content class="p-24">
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Position Column -->
+          <ng-container matColumnDef="#">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name_ar">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> الاسم بالعربى </th>
+            <td mat-cell *matCellDef="let element"> {{element.name_ar}} </td>
+          </ng-container>
+        
+          <!-- Name Column -->
+          <ng-container matColumnDef="name_en">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> الاسم بالانجليزية </th>
+            <td mat-cell *matCellDef="let element"> {{element.name_en}} </td>
+          </ng-container>
+        
+          <!-- region_count -->
+          <ng-container matColumnDef="region_count">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> عدد المناطق  </th>
+            <td mat-cell *matCellDef="let element"> {{element.region_count}} </td>
+          </ng-container>
+        
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="created_by">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600"> انشأ بواسطة </th>
+            <td mat-cell *matCellDef="let element"> {{element.created_by}} </td>
+          </ng-container>
+
+
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+              الاجراءات
+            </th>
+            <td mat-cell *matCellDef="let element" class="action-link">
+              <a
+              (click)="editArea(element)"
+                class="m-r-10 cursor-pointer"
+                ><i-tabler name="edit"   class="icon-18"></i-tabler
+              ></a>
+              <a
+              (click)="deleteElement(element)"
+                class="m-r-10 cursor-pointer"
+              >
+                <i-tabler name="trash" class="icon-18 text-danger"></i-tabler>
+              </a>
+            </td>
+          </ng-container>
+        
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+  
+  
+  
+    
+
