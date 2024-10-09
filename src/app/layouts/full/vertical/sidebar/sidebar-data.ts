@@ -19,6 +19,145 @@ export const navItems: NavItem[] = [
   {
     navCap: 'Apps',
   },
+
+  {
+    displayName: 'Chat',
+    iconName: 'message-2',
+    bgcolor: 'warning',
+    route: 'apps/chat',
+  },
+  {
+    displayName: 'Calendar',
+    iconName: 'calendar-event',
+    bgcolor: 'success',
+    route: 'apps/calendar',
+  },
+  {
+    displayName: 'Email',
+    iconName: 'mail',
+    bgcolor: 'error',
+    route: 'apps/email/inbox',
+  },
+  {
+    displayName: 'Contacts',
+    iconName: 'phone',
+    bgcolor: 'primary',
+    route: 'apps/contacts',
+  },
+  {
+    displayName: 'Courses',
+    iconName: 'certificate',
+    bgcolor: 'accent',
+    route: 'apps/courses',
+  },
+  {
+    displayName: 'Employee',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/employee',
+  },
+  {
+    displayName: 'المناطق',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/areas',
+  },
+  {
+    displayName: 'الجنسيات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/nationalities',
+  },
+  {
+    displayName: 'الفروع',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'success',
+    route: 'apps/branches',
+  },
+  {
+    displayName: 'المحافظات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'success',
+    route: 'apps/governorates',
+  },
+  {
+    displayName: 'نسب التقسيط',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/installment_rates',
+  },
+  {
+
+    displayName: 'نسب الوزارات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/ministry-rates',
+  },
+  {
+    displayName: 'الوزارات',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/ministries',
+  },
+
+  {
+    displayName: 'المحاكم',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/courts',
+  },
+  {
+    displayName: 'المغافر',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/police-stations',
+
+  },
+  {
+    displayName: 'البنوك',
+    iconName: 'brand-ctemplar',
+    bgcolor: 'warning',
+    route: 'apps/banks',
+  },
+  {
+    displayName: 'منجزين المعاملات',
+    iconName: 'currency-dollar',
+    bgcolor: 'warning',
+    route: 'apps/transactions-completed',
+  },
+  {
+    displayName: 'Notes',
+    iconName: 'note',
+    bgcolor: 'success',
+    route: 'apps/notes',
+  },
+  {
+    displayName: 'Tickets',
+    iconName: 'ticket',
+    bgcolor: 'error',
+    route: 'apps/tickets',
+  },
+  {
+    displayName: 'Invoice',
+    iconName: 'file-invoice',
+    bgcolor: 'primary',
+    route: 'apps/invoice',
+  },
+  {
+    displayName: 'ToDo',
+    iconName: 'edit',
+    bgcolor: 'accent',
+    route: 'apps/todo',
+  },
+  {
+    displayName: 'Taskboard',
+    iconName: 'checklist',
+    bgcolor: 'warning',
+    route: 'apps/taskboard',
+  },
+  // ddd
+  {
+    displayName: 'Blog',
   // {
   //   displayName: 'Chat',
   //   iconName: 'message-2',
