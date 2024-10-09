@@ -33,7 +33,7 @@
             <mat-label>النسبة</mat-label>
             <mat-select formControlName="ministry_percentage_id">
               <mat-option *ngFor="let percentage of ministryPercentages" [value]="percentage.id">
-                {{ percentage.name }} <!-- Assuming each percentage has 'id' and 'name' properties -->
+                {{ percentage.percent }} <!-- Assuming each percentage has 'id' and 'name' properties -->
               </mat-option>
             </mat-select>
           </mat-form-field>

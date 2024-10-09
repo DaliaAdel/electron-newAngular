@@ -340,6 +340,8 @@ export class DialogOverviewExampleDialog implements OnInit {
           Authorization: `Bearer ${authToken}`,
         };
 
+        console.log("formData",formData);
+
         this.http.post<{ data: any[] }>(
           `${environment.apiUrl}/ministries`,
           formData,

@@ -157,13 +157,6 @@ export class AreasComponent {
     }
   }
 }
-// ddd
-// export interface DialogData {
-//   name: string;
-//   animal: string;
-// }
-
-
 @Component({
   selector: 'dialog-overview-example-dialog',
   standalone: true,
@@ -195,7 +188,6 @@ export class DialogOverviewExampleDialog implements OnInit {
       name_ar: ['', Validators.required],
       name_en: ['', Validators.required],
       governorate_id: ['', Validators.required],
-      created_by : ['' , Validators.required],
     });
 
     // Check if we are in edit mode by checking if `data` exists
@@ -247,6 +239,7 @@ export class DialogOverviewExampleDialog implements OnInit {
       Authorization: `Bearer ${authToken}`,
     };
 
+// vvv
 
         // If editing, send a PUT request to update the data
         this.http.put<{ data: any[] }>(
