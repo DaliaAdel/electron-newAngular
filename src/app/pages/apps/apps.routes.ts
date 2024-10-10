@@ -32,6 +32,7 @@ import { PoliceStationsComponent } from './police-stations/police-stations.compo
 
 import { BanksComponent } from './banks/banks.component';
 import { TransactionsCompletedComponent } from './transactions-completed/transactions-completed.component';
+import { PermissionRoleComponent } from './permission-role/permission-role.component';
 
 
 export const AppsRoutes: Routes = [
@@ -331,6 +332,18 @@ export const AppsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'TransactionsCompleted' },
+          ],
+        },
+      },
+      // PermissionRoleComponent
+      {
+        path: 'permission-role',
+        component: PermissionRoleComponent,
+        data: {
+          title: 'الصلاحيات',
+          urls: [
+            { title: 'Dashboard', url: '/dashboards/dashboard1' },
+            { title: 'PermissionRoleComponent' },
           ],
         },
       },
