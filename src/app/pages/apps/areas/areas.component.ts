@@ -183,6 +183,7 @@ export class DialogOverviewExampleDialog implements OnInit {
     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any // Use @Inject here
   ) {
+    
     // Initialize the form
     this.form = this.fb.group({
       name_ar: ['', Validators.required],
