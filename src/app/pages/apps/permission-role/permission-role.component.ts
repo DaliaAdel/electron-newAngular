@@ -1,280 +1,286 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { environment } from 'src/enviroment/environment';
+import { ChangeDetectionStrategy, Component, inject, model, signal ,OnInit } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
+import { ApiRegionService } from '../api-region.service';
+import { DatePipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from 'src/app/material.module';
+import { TablerIconsModule } from 'angular-tabler-icons';
+import { MatNativeDateModule } from '@angular/material/core';
+import { Observable } from 'rxjs';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
 import {
-  MatTreeFlatDataSource,
-  MatTreeFlattener,
-  MatTreeModule,
-} from '@angular/material/tree';
-import { BehaviorSubject } from 'rxjs';
-import { SelectionModel } from '@angular/cdk/collections';
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { Inject } from '@angular/core'; // Make sure this is imported
+import {MatSelectModule} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import { map } from 'rxjs/operators';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
-export class TodoItemNode {
-  children: TodoItemNode[];
-  item: string;
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AddPermissionDialogComponent } from '../add-permission-dialog/add-permission-dialog.component'; // Adjust the path as needed
+
+export interface PeriodicElement {
+  id: string;
+  name_ar: string;
+  name_en: string;
+  created_by: string;
 }
-/** Flat to-do item node with expandable and level information */
-export class TodoItemFlatNode {
-  item: string;
-  level: number;
-  expandable: boolean;
-}
-const TREE_DATA = {
-  Groceries: {
-    'Almond Meal flour': null,
-    'Organic eggs': null,
-    'Protein Powder': null,
-    Fruits: {
-      Apple: null,
-      Berries: ['Blueberry', 'Raspberry'],
-      Orange: null,
-    },
-  },
-  Reminders: [
-    'Cook dinner',
-    'Read the Material Design spec',
-    'Upgrade Application to Angular',
-  ],
-};
-
-@Injectable()
-export class ChecklistDatabase {
-  dataChange = new BehaviorSubject<TodoItemNode[]>([]);
-
-  get data(): TodoItemNode[] {
-    return this.dataChange.value;
-  }
-
-  constructor() {
-    this.initialize();
-  }
-
-  initialize() {
-    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
-    //     file node as children.
-    const data = this.buildFileTree(TREE_DATA, 0);
-
-    // Notify the change.
-    this.dataChange.next(data);
-  }
-
-  /**
-   * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `TodoItemNode`.
-   */
-  buildFileTree(obj: { [key: string]: any }, level: number): TodoItemNode[] {
-    return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new TodoItemNode();
-      node.item = key;
-
-      if (value != null) {
-        if (typeof value === 'object') {
-          node.children = this.buildFileTree(value, level + 1);
-        } else {
-          node.item = value;
-        }
-      }
-
-      return accumulator.concat(node);
-    }, []);
-  }
-
-  /** Add an item to to-do list */
-  insertItem(parent: TodoItemNode, name: string) {
-    if (parent.children) {
-      parent.children.push({ item: name } as TodoItemNode);
-      this.dataChange.next(this.data);
-    }
-  }
-
-  updateItem(node: TodoItemNode, name: string) {
-    node.item = name;
-    this.dataChange.next(this.data);
-  }
-}
-
 
 @Component({
   selector: 'app-permission-role',
   standalone: true,
-  imports: [MatIconModule, MatCheckboxModule, MatFormFieldModule, MatTreeModule, MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TablerIconsModule,
+    MatNativeDateModule,
+    DatePipe,
+    MatTableModule,
+    HttpClientModule,
+    // HttpClient,
+  ],
   templateUrl: './permission-role.component.html',
   styleUrl: './permission-role.component.scss',
-  providers: [ChecklistDatabase],
+  // providers: [ChecklistDatabase],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PermissionRoleComponent {
-/** Map from flat node to nested node. This helps us finding the nested node to be modified */
-flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
+  displayedColumns: string[] = ['#', 'name_ar', 'name_en', 'created_by', 'action'];
+  dataSource = new MatTableDataSource<any>();
 
-/** Map from nested node to flattened node. This helps us to keep the same object for selection */
-nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
+  constructor(private http: HttpClient, private dialog: MatDialog) {
+    this.fetchData();
+  }
 
-/** A selected parent node to be inserted */
-selectedParent: TodoItemFlatNode | null = null;
+  fetchData() {
+    this.getElements().subscribe(
+      (data) => {
+        this.dataSource.data = data;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
 
-/** The new item's name */
-newItemName = '';
+  getElements(): Observable<any[]> {
 
-treeControl: FlatTreeControl<TodoItemFlatNode>;
+    const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
 
-treeFlattener: MatTreeFlattener<TodoItemNode, TodoItemFlatNode>;
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
 
-dataSource: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
-
-/** The selection for checklist */
-checklistSelection = new SelectionModel<TodoItemFlatNode>(
-  true /* multiple */
-);
-
-constructor(private _database: ChecklistDatabase) {
-  this.treeFlattener = new MatTreeFlattener(
-    this.transformer,
-    this.getLevel,
-    this.isExpandable,
-    this.getChildren
+  return this.http.get<{ data: any[] }>(`${environment.apiUrl}/roles`, { headers }).pipe(
+    map((response) => response.data)
   );
-  this.treeControl = new FlatTreeControl<TodoItemFlatNode>(
-    this.getLevel,
-    this.isExpandable
-  );
-  this.dataSource = new MatTreeFlatDataSource(
-    this.treeControl,
-    this.treeFlattener
-  );
+  }
 
-  _database.dataChange.subscribe((data) => {
-    this.dataSource.data = data;
-  });
-}
+    // search
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase(); // Apply the filter to MatTableDataSource
+  }
 
-getLevel = (node: TodoItemFlatNode) => node.level;
-
-isExpandable = (node: TodoItemFlatNode) => node.expandable;
-
-getChildren = (node: TodoItemNode): TodoItemNode[] => node.children;
-
-hasChild = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
-
-hasNoContent = (_: number, _nodeData: TodoItemFlatNode) =>
-  _nodeData.item === '';
-
-/**
- * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
- */
-transformer = (node: TodoItemNode, level: number) => {
-  const existingNode = this.nestedNodeMap.get(node);
-  const flatNode =
-    existingNode && existingNode.item === node.item
-      ? existingNode
-      : new TodoItemFlatNode();
-  flatNode.item = node.item;
-  flatNode.level = level;
-  flatNode.expandable = !!node.children?.length;
-  this.flatNodeMap.set(flatNode, node);
-  this.nestedNodeMap.set(node, flatNode);
-  return flatNode;
-};
-
-/** Whether all the descendants of the node are selected. */
-descendantsAllSelected(node: TodoItemFlatNode): boolean {
-  const descendants = this.treeControl.getDescendants(node);
-  const descAllSelected =
-    descendants.length > 0 &&
-    descendants.every((child) => {
-      return this.checklistSelection.isSelected(child);
+  // Open dialog for adding a new area
+  addPermission() {
+    const dialogRef = this.dialog.open(AddPermissionDialogComponent, {
+      width: '70%',
     });
-  return descAllSelected;
-}
 
-/** Whether part of the descendants are selected */
-descendantsPartiallySelected(node: TodoItemFlatNode): boolean {
-  const descendants = this.treeControl.getDescendants(node);
-  const result = descendants.some((child) =>
-    this.checklistSelection.isSelected(child)
-  );
-  return result && !this.descendantsAllSelected(node);
-}
-
-/** Toggle the to-do item selection. Select/deselect all the descendants node */
-todoItemSelectionToggle(node: TodoItemFlatNode): void {
-  this.checklistSelection.toggle(node);
-  const descendants = this.treeControl.getDescendants(node);
-  this.checklistSelection.isSelected(node)
-    ? this.checklistSelection.select(...descendants)
-    : this.checklistSelection.deselect(...descendants);
-
-  // Force update for the parent
-  descendants.forEach((child) => this.checklistSelection.isSelected(child));
-  this.checkAllParentsSelection(node);
-}
-
-/** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
-todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
-  this.checklistSelection.toggle(node);
-  this.checkAllParentsSelection(node);
-}
-
-/* Checks all the parents when a leaf node is selected/unselected */
-checkAllParentsSelection(node: TodoItemFlatNode): void {
-  let parent: TodoItemFlatNode | null = this.getParentNode(node);
-  while (parent) {
-    this.checkRootNodeSelection(parent);
-    parent = this.getParentNode(parent);
-  }
-}
-
-/** Check root node checked state and change it accordingly */
-checkRootNodeSelection(node: TodoItemFlatNode): void {
-  const nodeSelected = this.checklistSelection.isSelected(node);
-  const descendants = this.treeControl.getDescendants(node);
-  const descAllSelected =
-    descendants.length > 0 &&
-    descendants.every((child) => {
-      return this.checklistSelection.isSelected(child);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.fetchData(); // Refresh data after dialog closes
+      }
     });
-  if (nodeSelected && !descAllSelected) {
-    this.checklistSelection.deselect(node);
-  } else if (!nodeSelected && descAllSelected) {
-    this.checklistSelection.select(node);
-  }
-}
-
-/* Get the parent node of a node */
-getParentNode(node: TodoItemFlatNode): TodoItemFlatNode | null {
-  const currentLevel = this.getLevel(node);
-
-  if (currentLevel < 1) {
-    return null;
   }
 
-  const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
+  // Open dialog for editing an existing area
+  editArea(area: any): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      height: '62%',
+      width: '40%',
+      data: area, // Pass the area data to the dialog
+    });
 
-  for (let i = startIndex; i >= 0; i--) {
-    const currentNode = this.treeControl.dataNodes[i];
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.fetchData(); // Refresh data after editing
+      }
+    });
+  }
 
-    if (this.getLevel(currentNode) < currentLevel) {
-      return currentNode;
+// delete
+  deleteElement(element: PeriodicElement): void {
+
+    
+    const confirmDelete = confirm(`Are you sure you want to delete ${element.name_ar}?`); // Optional confirmation dialog
+    if (confirmDelete) {
+      const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+      //  const url ="https://electronkw.net/new_laravel_API/api/regions";
+
+        // If editing, send a PUT request to update the data
+        this.http.delete<{ data: any[] }>( `${environment.apiUrl}/roles/${element.id}`,
+           // formData as the request body
+          { headers } // headers passed separately as the third argument
+          ).subscribe(
+        response => {
+          console.log('Data deleted successfully:', response);
+          this.fetchData(); // Refresh data after deletion
+        },
+        error => {
+          console.error('Error deleting data:', error);
+          alert('Failed to delete the item.');
+        }
+      );
     }
   }
-  return null;
+}
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  standalone: true,
+  imports: [
+    MaterialModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatSelectModule,
+    CommonModule,
+  ],
+  templateUrl: './dialog.html',
+})
+export class DialogOverviewExampleDialog implements OnInit {
+  form: FormGroup;
+  isEditMode: boolean = false;
+  Governorate: any[] = []; // To store the additional data
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any // Use @Inject here
+  ) {
+    
+    // Initialize the form
+    this.form = this.fb.group({
+      name_ar: ['', Validators.required],
+      name_en: ['', Validators.required],
+      governorate_id: ['', Validators.required],
+    });
+
+    // Check if we are in edit mode by checking if `data` exists
+    if (data) {
+      this.isEditMode = true;
+      this.form.patchValue(data); // Populate the form with the area data
+    }
+  }
+
+  ngOnInit(): void {
+    this.fetchGovernorate(); // Fetch additional data on initialization
+  }
+
+  fetchGovernorate(): void {
+    const authToken = localStorage.getItem('authToken');
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+    this.http.get<{ data: any[] }>(`${environment.apiUrl}/roles`, { headers })
+      .subscribe(
+        (response) => {
+          // console.log('Ministry percentages fetched:', response.data);
+          this.Governorate = response.data; // Store the fetched data
+          // console.log('Ministry percentages fetched2:', this.ministryPercentages);
+        },
+        (error) => {
+          console.error('Error fetching Governorate:', error);
+        }
+      );
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  save(): void {
+    if (this.form.valid) {
+      const formData = this.form.value;
+      // console.log
+
+      if (this.isEditMode) {
+
+        const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+    console.log("authToken",authToken);
+    // Set the headers including the Authorization token
+    const headers = {
+      Authorization: `Bearer ${authToken}`,
+    };
+
+// vvv
+
+        // If editing, send a PUT request to update the data
+        this.http.put<{ data: any[] }>(
+          `${environment.apiUrl}/roles/${this.data.id}`,
+          formData, // formData as the request body
+          { headers } // headers passed separately as the third argument
+        ).subscribe(
+          (response) => {
+            console.log('Data updated successfully:', response);
+            this.dialogRef.close(formData); // Close the dialog and return the updated data
+          },
+          (error) => {
+            console.error('Error updating data:', error);
+          }
+        );
+      } else {
+
+        const authToken = localStorage.getItem('authToken'); // Retrieve the token from localStorage
+
+        console.log("authToken",authToken);
+        // Set the headers including the Authorization token
+        const headers = {
+          Authorization: `Bearer ${authToken}`,
+        };
+        // If adding a new area, send a POST request
+        // this.http.post('https://electronkw.net/new_laravel_API/api/regions', formData)
+        this.http.post<{ data: any[] }>(
+          `${environment.apiUrl}/roles`,
+          formData, // formData as the request body
+          { headers } // headers passed separately as the third argument
+        ).subscribe(
+          (response) => {
+            console.log('Data saved successfully:', response);
+            this.dialogRef.close(formData); // Close the dialog and return the new data
+          },
+          (error) => {
+            console.error('Error saving data:', error);
+          }
+        );
+      }
+    }
+  }
 }
 
-/** Select the category so we can insert the new item. */
-addNewItem(node: TodoItemFlatNode) {
-  const parentNode = this.flatNodeMap.get(node);
-  this._database.insertItem(parentNode!, '');
-  this.treeControl.expand(node);
-}
-
-/** Save the node to database */
-saveNode(node: TodoItemFlatNode, itemValue: string) {
-  const nestedNode = this.flatNodeMap.get(node);
-  this._database.updateItem(nestedNode!, itemValue);
-}
-}
