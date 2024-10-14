@@ -1,10 +1,10 @@
 <!-- <p>add-permission-dialog works!</p> -->
 
 
-  <!-- <h1 mat-dialog-title class="text-center"><strong>{{ isEditMode ? 'تعديل المنطقة' : 'اضافة منطقة جديدة' }}</strong></h1> -->
+  <h1 mat-dialog-title class="text-center"><strong>{{ isEditMode ? 'تعديل المنطقة' : 'اضافة منطقة جديدة' }}</strong></h1>
 <div mat-dialog-content dir="rtl">
   <div class="container">
-    <!-- <form [formGroup]="form" (ngSubmit)="save()"> -->
+    <form [formGroup]="form" (ngSubmit)="save()">
       <div class="row p-5 mx-auto border">
 
         
@@ -69,14 +69,14 @@
           </mat-card>
         
         
-        <!-- <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end">
           <button mat-flat-button color="primary" type="submit">
             {{ isEditMode ? 'تعديل' : 'حفظ' }}
-              حفظ
+              <!-- حفظ -->
           </button>
           <button mat-stroked-button color="warn" class="m-l-8" (click)="onNoClick()">الغاء</button>
-        </div> -->
+        </div>
       </div>
-    <!-- </form> -->
+    </form>
   </div>
 </div>
